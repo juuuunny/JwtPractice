@@ -3,7 +3,9 @@ package com.example.springjwt.domain.user.service;
 import com.example.springjwt.domain.user.security.CustomUserDetails;
 import com.example.springjwt.domain.user.entity.User;
 import com.example.springjwt.domain.user.repository.UserRepository;
+import com.example.springjwt.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<User> user= userRepository.findByUsername(username);
-        return user.map(CustomUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user.map(CustomUserDetails::new).orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "User not found"));
 
     }
 }
